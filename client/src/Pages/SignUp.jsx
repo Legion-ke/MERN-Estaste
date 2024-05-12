@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-
+import OAuth from '../Components/OAuth';
 export default function SignUp() {
   const [formData, setFormData] = useState({});
   const [error, setError] = useState(null);
   const [loading,setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({
@@ -13,8 +14,6 @@ export default function SignUp() {
       [e.target.id]: e.target.value,
     });
   };
-  const navigate = useNavigate();
-
   const handleSubmit = async (e) => {
     try{
       e.preventDefault();
@@ -28,9 +27,10 @@ export default function SignUp() {
         body:JSON.stringify(formData),
       });
       const data = await res.json();
+      console.log(data);
       if(data.success == false){
-        setError(data.message);
         setLoading(false);
+        setError(data.message);
         return;
       }
         setLoading(false);
@@ -70,6 +70,7 @@ export default function SignUp() {
         <button disabled={loading} className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80">
          {loading ? 'Loading...' : 'Sign Up'}
         </button>
+        <OAuth />
       </form>
       <div className="flex gap-2 mt-5">
         <p>Have an account?</p>
